@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link, replace, useNavigate } from "react-router-dom";
 import Noti from "./Noti";
 import { BACKENDURL } from "../../global/config";
+import Search from "./profile/Search";
 
 function SNavBar() {
   const [isOpen, setOpen] = useState(false);
   const [userData, setUserData] = useState(null);
   const [search, setSearch] = useState("");
+  const [searchData, setSearchData] = useState([]);
+  const [showSearch, setShowSearch] = useState(false);
 
   const [noti, setNoti] = useState(false);
   const [mode, setMode] = useState({});
@@ -71,8 +74,21 @@ function SNavBar() {
 
   // function to get the search term and search
 
-  async function Search() {
-    const res = await fetch("");
+  async function handleSearch() {
+    const res = await fetch(`${BACKENDURL}/search?search=${search}`);
+    const data = await res.json();
+    if (res.ok) {
+      console.log(data.data);
+      setSearchData(data.data);
+    }
+
+    if (searchData.length != 0) {
+      setShowSearch(true);
+    }
+
+    if (search.length == 1) {
+      setShowSearch(false);
+    }
   }
 
   useEffect(() => {
@@ -108,9 +124,14 @@ function SNavBar() {
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
+              handleSearch();
             }}
           />
         </div>
+
+        {showSearch && (
+          <Search search={searchData} term={search} setSearch={setShowSearch} />
+        )}
 
         {/* profile and notification */}
         <div className="flex items-center gap-3 md:gap-10">
