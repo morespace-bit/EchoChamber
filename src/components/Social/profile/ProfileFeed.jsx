@@ -107,7 +107,7 @@ export default function ProfileFeed({ post, user }) {
             {i?.imageUrl && (
               <img
                 src={i?.imageUrl}
-                className="rounded-xl min-w-100 md:min-w-150 object-center max-w-150 "
+                className="rounded-xl min-w-100 md:min-w-150 object-center  "
               />
             )}
           </div>
